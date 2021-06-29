@@ -36,10 +36,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ontio/ontology-crypto/ec"
 	"github.com/ontio/ontology-crypto/keypair"
 	"github.com/ontio/ontology-crypto/sm2"
+	"github.com/polynetwork/eth_relayer/tools/rlp"
 	"github.com/polynetwork/poly/common"
 	"golang.org/x/crypto/sha3"
 )
@@ -287,7 +287,7 @@ type blockRsp struct {
 }
 
 func GetNodeHeader(url string, restClient *RestClient, height uint64) (*Header, error) {
-	params := []interface{}{fmt.Sprintf("0x%x", height), true}
+	params := []interface{}{fmt.Sprintf("0x%x", height), false}
 	req := &blockReq{
 		JsonRpc: "2.0",
 		Method:  "eth_getBlockByNumber",
@@ -302,6 +302,7 @@ func GetNodeHeader(url string, restClient *RestClient, height uint64) (*Header, 
 	if err != nil {
 		return nil, fmt.Errorf("GetNodeHeight err: %s", err)
 	}
+	fmt.Println("rspdata", string(rspdata))
 	rsp := &blockRsp{}
 	err = json.Unmarshal(rspdata, rsp)
 	if err != nil {
